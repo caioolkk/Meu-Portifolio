@@ -266,53 +266,64 @@
 
     /* Projetos - Linha do Tempo */
     #projects .container {
-      max-width: 1000px;
-      text-align: center;
+    max-width: 1000px;
+    text-align: center;
     }
 
     .section-title {
-      font-size: 2.8rem;
-      margin-bottom: 60px;
+    font-size: 2.8rem;
+    margin-bottom: 60px;
     }
 
     .timeline {
-      position: relative;
-      max-width: 800px;
-      margin: 0 auto;
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
     }
 
     .timeline::after {
-      content: '';
-      position: absolute;
-      width: 4px;
-      background: var(--primary);
-      top: 0;
-      bottom: 0;
-      left: 50%;
-      margin-left: -2px;
-      border-radius: 2px;
+    content: '';
+    position: absolute;
+    width: 4px;
+    background: var(--primary);
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -2px;
+    border-radius: 2px;
     }
 
     .timeline-item {
-      padding: 20px 40px;
-      position: relative;
-      width: 50%;
-      opacity: 0;
+    padding: 20px 40px;
+    position: relative;
+    width: 50%;
+    opacity: 0;
+    transition: all 0.6s ease;
     }
 
-    .timeline-item:nth-child(odd) {
-      left: 0;
-      transform: translateX(-100%);
+    /* Correção para mobile: alinha à esquerda com padding */
+    @media (max-width: 1100px) {
+    .timeline::after {
+        left: 31px;
+        margin-left: 0;
     }
-
-    .timeline-item:nth-child(even) {
-      left: 50%;
-      transform: translateX(100%);
+    .timeline-item {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 25px;
+        transform: translateX(0) !important;
+        left: 0;
     }
-
-    .timeline-item.show {
-      transform: translateX(0);
-      opacity: 1;
+    .timeline-item::after {
+        left: 30px;
+    }
+    .timeline-item {
+        opacity: 1;
+        transform: none;
+    }
+    .timeline-item {
+        margin-bottom: 20px;
+    }
     }
 
     .timeline-content {
@@ -804,16 +815,28 @@
     <div class="container">
       <h2 class="section-title" data-translate="courses.title">Cursos & Formação</h2>
       <div class="course-card">
-        <h3>Desenvolvimento Web Completo</h3>
-        <p>Curso full-stack com HTML, CSS, JavaScript, React, Node.js e MongoDB. Concluído em 2023.</p>
+        <h3>POO e Banco de Dados</h3>
+        <p>Curso básico concluído com foco em orientação a objetos e SQL Server.</p>
       </div>
       <div class="course-card">
-        <h3>Python para IA e Automação</h3>
-        <p>Domínio em manipulação de dados, machine learning e automações com Python. Em andamento.</p>
+        <h3>Faculdade de Ciência da Computação</h3>
+        <p>Graduação em andamento. Foco em Java, Banco de Dados, Estrutura de Dados e Algoritmos.</p>
       </div>
       <div class="course-card">
-        <h3>Figma & Design de Interfaces</h3>
-        <p>Design de protótipos e UX/UI para aplicações modernas. Concluído em 2023.</p>
+        <h3>Curso Técnico em Programação e Redes de Computadores</h3>
+        <p>Aprendizado prático em redes, lógica de programação e desenvolvimento. Em andamento.</p>
+      </div>
+            <div class="course-card">
+        <h3>HTML, CSS e JavaScript (Autodidata)</h3>
+        <p>Aprendizado independente por livros, vídeos e prática em projetos pessoais.</p>
+      </div>
+            <div class="course-card">
+        <h3>Python - Curso em Vídeo</h3>
+        <p>Curso em andamento com foco em lógica, estruturas e automações.</p>
+      </div>
+            <div class="course-card">
+        <h3>Inteligência Artificial (Autodidata)</h3>
+        <p>Estudo contínuo com foco em machine learning, dados e automações com Python.</p>
       </div>
     </div>
   </section>
@@ -1013,8 +1036,23 @@
 
     const observer = new IntersectionObserver(animateOnScroll, { threshold: 0.1 });
 
-    document.querySelectorAll('.timeline-item, .skill-card, .course-card, #about p, .social-links, .contact-form').forEach(el => {
-      observer.observe(el);
+    // Força exibição no mobile (caso Intersection Observer falhe)
+    if (window.innerWidth <= 1100) {
+    document.querySelectorAll('.timeline-item').forEach(el => {
+        el.classList.add('show');
+        el.style.opacity = 1;
+        el.style.transform = 'none';
+    });
+    } else {
+    // Só observa no desktop
+    document.querySelectorAll('.timeline-item').forEach(el => {
+        observer.observe(el);
+    });
+    }
+
+    // Mantém os outros elementos com animação normal
+    document.querySelectorAll('.skill-card, .course-card, #about p, .social-links, .contact-form').forEach(el => {
+    observer.observe(el);
     });
 
     // Ano atual
